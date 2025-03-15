@@ -1,0 +1,17 @@
+{
+  "frontendFolder": "/Users/timseitz/IdeaProjects/bateen/./src/main/frontend",
+  "themeFolder": "themes",
+  "themeResourceFolder": "/Users/timseitz/IdeaProjects/bateen/./src/main/frontend/generated/jar-resources",
+  "staticOutput": "/Users/timseitz/IdeaProjects/bateen/target/classes/META-INF/VAADIN/webapp/VAADIN/static",
+  "generatedFolder": "generated",
+  "statsOutput": "/Users/timseitz/IdeaProjects/bateen/target/classes/META-INF/VAADIN/config",
+  "frontendBundleOutput": "/Users/timseitz/IdeaProjects/bateen/target/classes/META-INF/VAADIN/webapp",
+  "devBundleOutput": "/Users/timseitz/IdeaProjects/bateen/target/dev-bundle/webapp",
+  "devBundleStatsOutput": "/Users/timseitz/IdeaProjects/bateen/target/dev-bundle/config",
+  "jarResourcesFolder": "/Users/timseitz/IdeaProjects/bateen/./src/main/frontend/generated/jar-resources",
+  "themeName": "",
+  "clientServiceWorkerSource": "/Users/timseitz/IdeaProjects/bateen/target/sw.ts",
+  "pwaEnabled": false,
+  "offlineEnabled": false,
+  "offlinePath": "'offline.html'"
+}
