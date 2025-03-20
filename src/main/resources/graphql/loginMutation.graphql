@@ -1,0 +1,13 @@
+mutation abc($officerId: String!, $pin: Int!) {
+    login(officerId: $officerId, pin: $pin) {
+        id
+        officerId
+        firstname
+        lastname
+        controlUnit
+        appearance {
+            colorScheme
+        }
+        token
+    }
+}

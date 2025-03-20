@@ -4,9 +4,7 @@ import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -16,7 +14,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.StreamResource;
+import de.breuer.bateen.controller.ConfigController;
 import de.breuer.bateen.view.layout.StartLayout;
 
 import java.util.concurrent.CompletableFuture;
@@ -28,7 +26,7 @@ public class StartView extends VerticalLayout {
     private Button selectedButton;
     private Button testConnectionButton;
     private String url;
-    private Boolean continueBool = false;
+    private boolean continueBool = false;
 
 
     public StartView() {
@@ -43,23 +41,6 @@ public class StartView extends VerticalLayout {
         add(new Span());
         add(testConnectionButton);
         add(new Span());
-    }
-
-    private Component createTitleContent() {
-        VerticalLayout titleContent = new VerticalLayout();
-        titleContent.setWidthFull();
-        titleContent.setAlignItems(Alignment.CENTER);
-
-        H1 title = new H1("BaTeEn Start");
-        title.addClassName("custom-title");
-        titleContent.add(title);
-
-        StreamResource streamResource = new StreamResource("bateen.png", () -> getClass().getResourceAsStream("/bateen.png"));
-        Image logo = new Image(streamResource, "BaTeEn");
-        logo.setWidth("28%");
-        logo.getStyle().set("border-radius", "var(--lumo-border-radius-l)");
-        titleContent.addComponentAsFirst(logo);
-        return titleContent;
     }
 
     public Component createContent() {
@@ -189,7 +170,7 @@ public class StartView extends VerticalLayout {
 
         button.addClickListener(event -> {
             if (continueBool) {
-                // Falls der Test bereits erfolgreich war und erneut geklickt wird, navigiere weiter
+                ConfigController.setUrl(url);
                 getUI().ifPresent(ui -> ui.navigate("login"));
                 return;
             }

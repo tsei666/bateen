@@ -1,6 +1,6 @@
 package de.breuer.bateen.controller;
 
-import de.breuer.bateen.BateenConfig;
+import de.breuer.bateen.model.BateenConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,5 +16,9 @@ public class ConfigController {
 
     public static String getUrl(){
         return bateenConfig != null ? bateenConfig.getUrl() : "";
+    }
+
+    public static void setUrl(String url){
+        bateenConfig.setUrl(url);
     }
 }
