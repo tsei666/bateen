@@ -15,21 +15,22 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import de.breuer.bateen.controller.ConfigController;
+import de.breuer.bateen.controller.ConnectionController;
 import de.breuer.bateen.view.layout.StartLayout;
-
-import java.util.concurrent.CompletableFuture;
 
 @Route(value = "", layout = StartLayout.class)
 @PageTitle("BaTeEn")
 @CssImport("./styles/styles.css")
 public class StartView extends VerticalLayout {
+    private ConnectionController connectionController;
     private Button selectedButton;
     private Button testConnectionButton;
     private String url;
     private boolean continueBool = false;
 
 
-    public StartView() {
+    public StartView(ConnectionController connectionController) {
+        this.connectionController = connectionController;
         testConnectionButton = createTestConnectionButton();
 
         this.setSizeFull();
@@ -185,24 +186,23 @@ public class StartView extends VerticalLayout {
             spinnerIcon.setVisible(true);
             loadingText.setVisible(true);
 
-            // Verbindungstest im Hintergrund ausführen
-            CompletableFuture.supplyAsync(() -> testConnection(url))
-                    .thenAccept(success -> {
-                        // UI-Änderungen im UI-Thread vornehmen
-                        getUI().ifPresent(ui -> ui.access(() -> {
-                            spinnerIcon.setVisible(false);
-                            loadingText.setVisible(false);
-                            if (success) {
-                                continueBool = true;
-                                button.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
-                                button.setText("Connected successfully! Click here to continue");
-                            } else {
-                                button.addThemeVariants(ButtonVariant.LUMO_ERROR);
-                                button.setText("Unable to connect");
-                            }
-                            button.setEnabled(true);
-                        }));
-                    });
+            // Verbindungstest durchführen
+            boolean success = testConnection(url);
+
+            // UI-Änderungen im UI-Thread vornehmen
+            getUI().ifPresent(ui -> ui.access(() -> {
+                spinnerIcon.setVisible(false);
+                loadingText.setVisible(false);
+                if (success) {
+                    continueBool = true;
+                    button.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+                    button.setText("Connected successfully! Click here to continue");
+                } else {
+                    button.addThemeVariants(ButtonVariant.LUMO_ERROR);
+                    button.setText("Unable to connect");
+                }
+                button.setEnabled(true);
+            }));
         });
 
         return button;
@@ -210,13 +210,8 @@ public class StartView extends VerticalLayout {
 
 
     private boolean testConnection(String url) {
-        try {
-            Thread.sleep(2000);
-            return Math.random() < 0.8;
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            return false;
-        }
+        ConfigController.setUrl(url);
+        return connectionController.isAlive();
     }
 
     private void resetTestConnectionButton() {
