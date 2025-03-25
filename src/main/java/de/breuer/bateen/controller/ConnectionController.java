@@ -1,7 +1,11 @@
 package de.breuer.bateen.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import de.breuer.bateen.service.ConnectionService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class ConnectionController {
 
@@ -12,7 +16,12 @@ public class ConnectionController {
     }
 
     public boolean isAlive() {
-        return connectionService.getAlive(); // Warten auf das Ergebnis (synchron)
+        try {
+            return connectionService.getAlive();
+        } catch (JsonProcessingException e) {
+            log.error(e.getMessage());
+        }
+        return false;
     }
 }
 

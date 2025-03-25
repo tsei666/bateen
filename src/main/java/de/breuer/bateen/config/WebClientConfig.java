@@ -1,4 +1,4 @@
-package de.breuer.bateen;
+package de.breuer.bateen.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

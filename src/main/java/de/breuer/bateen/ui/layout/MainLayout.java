@@ -1,4 +1,4 @@
-package de.breuer.bateen.view.layout;
+package de.breuer.bateen.ui.layout;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentUtil;
@@ -16,7 +16,6 @@ import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import de.breuer.bateen.controller.ConfigController;
-import de.breuer.bateen.view.StartView;
 
 import java.util.Optional;
 
@@ -86,9 +85,7 @@ public class MainLayout extends AppLayout {
     }
 
     private Component[] createMenuItems() {
-        return new Tab[] { createTab("Hello World", StartView.class),
-                createTab("Card List", StartView.class),
-                createTab("About", StartView.class) };
+        return new Tab[] { };//createTab("Hello World", StartView.class),
     }
 
     private static Tab createTab(String text,
