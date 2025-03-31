@@ -18,28 +18,28 @@ public class ConfigController {
         ConfigController.bateenConfig = bateenConfig;
     }
 
-    public static String getUrl(){
+    public static String getUrl() {
         return bateenConfig != null ? bateenConfig.getUrl() : "";
     }
 
-    public static void setUrl(String url){
+    public static void setUrl(String url) {
         bateenConfig.setUrl(String.format("http://%s", url));
         setGraphqlUrl(url);
     }
 
-    public static String getGraphqlUrl(){
+    public static String getGraphqlUrl() {
         return bateenConfig != null ? bateenConfig.getGraphqlUrl() : "";
     }
 
-    public static void setGraphqlUrl(String url){
+    public static void setGraphqlUrl(String url) {
         bateenConfig.setGraphqlUrl(String.format("http://%s/graphql", url));
     }
 
-    public static List<Officer> getOfficers(){
+    public static List<Officer> getOfficers() {
         return bateenConfig.getOfficers();
     }
 
-    public static void addOfficer(Officer officer){
+    public static void addOfficer(Officer officer) {
         if (bateenConfig.getOfficers() == null) {
             bateenConfig.setOfficers(List.of(officer));
         } else {
@@ -47,5 +47,18 @@ public class ConfigController {
             officers.add(officer);
             bateenConfig.setOfficers(officers);
         }
+    }
+
+    public static Officer removeOfficerAndGetRemainOfficerOrNull(String officerId) {
+        if (bateenConfig.getOfficers() != null) {
+            List<Officer> officers = new ArrayList<>(bateenConfig.getOfficers());
+            Officer deletedOfficer = officers.stream().filter(officer -> officerId.equals(officer.getOfficerId())).findFirst().orElse(null);
+            officers.remove(deletedOfficer);
+            bateenConfig.setOfficers(officers);
+            if (officers.size() == 1) {
+                return officers.getFirst();
+            } else return null;
+        }
+        return null;
     }
 }

@@ -4,6 +4,7 @@ import de.breuer.bateen.model.Officer;
 import de.breuer.bateen.service.KCKService;
 import de.breuer.bateen.service.LoginService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Slf4j
@@ -13,21 +14,26 @@ public class LoginController {
     LoginService loginService;
     KCKService kckService;
 
+    @Autowired
     public LoginController(LoginService loginService, KCKService kckService) {
         this.loginService = loginService;
         this.kckService = kckService;
     }
 
     public Officer loginOfficer(String officerId, int pin) {
-        kckService.postKckData();
-        kckService.getKckData();
+        kckService.postOfficerWithId(officerId);
         Officer officer = loginService.performLogin(officerId, pin);
         ConfigController.addOfficer(officer);
         return officer;
     }
 
     public void removeOfficer(String officerId) {
-        log.info("Remove Officer");
+        Officer remainingOfficer = ConfigController.removeOfficerAndGetRemainOfficerOrNull(officerId);
+        if (remainingOfficer != null) {
+            kckService.postReminingOfficerWithId(remainingOfficer.getOfficerId());
+        } else {
+            kckService.postNoOfficers();
+        }
     }
 
 }

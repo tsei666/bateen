@@ -2,8 +2,10 @@ package de.breuer.bateen.ui.login;
 
 import de.breuer.bateen.controller.LoginController;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
+@Component
 public class LoginViewController {
 
     private final LoginController loginController;

@@ -34,7 +34,7 @@ public class StartLayout extends VerticalLayout implements RouterLayout {
 
         StreamResource streamResource = new StreamResource("bateen.png", () -> getClass().getResourceAsStream("/bateen.png"));
         Image logo = new Image(streamResource, "BaTeEn");
-        logo.setWidth("23%");
+        logo.setWidth("15%");
         logo.getStyle().set("border-radius", "var(--lumo-border-radius-l)");
         titleContent.addComponentAsFirst(logo);
 

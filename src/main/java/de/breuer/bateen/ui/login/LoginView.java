@@ -8,7 +8,6 @@ import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import de.breuer.bateen.controller.LoginController;
 import de.breuer.bateen.ui.layout.StartLayout;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class LoginView extends VerticalLayout {
 
     private final LoginViewController controller;
-    private final LoginViewModel model = new LoginViewModel();
 
     @Autowired
-    public LoginView(LoginController loginController) {
-        this.controller = new LoginViewController(loginController, model);
+    public LoginView(LoginViewController loginViewController) {
+        this.controller = loginViewController;
         setSizeFull();
         setAlignItems(Alignment.CENTER);
         setJustifyContentMode(JustifyContentMode.CENTER);
@@ -81,10 +79,7 @@ public class LoginView extends VerticalLayout {
     }
 
     private Component createContinueButton() {
-        Button weiterButton = new Button("Next", click -> {
-            Notification.show("Weiter zur nächsten Ansicht...", 2000, Notification.Position.BOTTOM_CENTER);
-            // Navigation hier einfügen
-        });
+        Button weiterButton = new Button("Next", click -> getUI().ifPresent(ui -> ui.navigate("main")));
         weiterButton.getStyle()
                 .set("margin-top", "40px")
                 .set("font-size", "18px")
