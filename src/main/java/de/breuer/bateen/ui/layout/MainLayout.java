@@ -16,10 +16,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.StreamResource;
 import de.breuer.bateen.controller.ConfigController;
-import de.breuer.bateen.ui.AutomaticTestView;
-import de.breuer.bateen.ui.ChangeVmView;
-import de.breuer.bateen.ui.ConfigureTestView;
-import de.breuer.bateen.ui.MainView;
+import de.breuer.bateen.ui.*;
+import de.breuer.bateen.ui.display.DisplayView;
 import de.breuer.bateen.ui.login.LoginViewController;
 import de.breuer.bateen.ui.login.LoginViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,8 +146,9 @@ public class MainLayout extends AppLayout {
                 createTab("Home", MainView.class),
                 createTab("Configure Test", ConfigureTestView.class),
                 createTab("Automatic", AutomaticTestView.class),
-                createTab("Change VM", ChangeVmView.class)
-        };//createTab("Hello World", StartView.class),
+                createTab("Change VM", ChangeVmView.class),
+                createTab("7-Display", DisplayView.class)
+        };
     }
 
     private static Tab createTab(String text,
