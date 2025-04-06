@@ -1,4 +1,4 @@
-package de.breuer.bateen.ui;
+package de.breuer.bateen.ui.views;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;

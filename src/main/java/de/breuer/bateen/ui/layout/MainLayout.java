@@ -16,10 +16,13 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.StreamResource;
 import de.breuer.bateen.controller.ConfigController;
-import de.breuer.bateen.ui.*;
 import de.breuer.bateen.ui.display.DisplayView;
 import de.breuer.bateen.ui.login.LoginViewController;
 import de.breuer.bateen.ui.login.LoginViewModel;
+import de.breuer.bateen.ui.views.AutomaticTestView;
+import de.breuer.bateen.ui.views.ChangeVmView;
+import de.breuer.bateen.ui.views.ConfigureTestView;
+import de.breuer.bateen.ui.views.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;

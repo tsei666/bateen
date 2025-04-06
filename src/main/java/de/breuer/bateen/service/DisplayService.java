@@ -46,6 +46,7 @@ public class DisplayService {
     }
 
 
+    //TODO: Ist put disabled?
     public void putDeviceStatusModel(DeviceStatusModel deviceStatusModel) {
         String uri = ConfigController.getUrl().concat(DEVICE_STATUS_ENDPOINT);
         ResponseEntity<Void> response = webClientBuilder.build().put()
