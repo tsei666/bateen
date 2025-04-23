@@ -5,8 +5,8 @@ public interface Sensor<T> {
     String getSensorRecordId();
     void setSensorRecordId(String sensorRecordId);
 
-    T getData();  // z. B. für Wrapper oder UI
-    void setData(T data); // z. B. aus einem Formular heraus
+    T getData();
+    void setData(T data);
 
-    String getTimestamp(); // ggf. zentral über default
+    String getTimestamp();
 }

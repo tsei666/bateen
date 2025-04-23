@@ -3,9 +3,7 @@ package de.breuer.bateen.sensor;
 import lombok.Data;
 
 @Data
-public class VehicleSensor implements Sensor<VehicleSensor> {
-    private String sensorRecordId;
-
+public class VehicleSensor extends AbstractSensor<VehicleSensor>{
     private int vehicleWeightClass;
     private int vehicleType;
     private int vehicleHeight;

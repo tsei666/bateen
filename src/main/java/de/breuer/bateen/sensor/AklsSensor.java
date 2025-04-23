@@ -3,9 +3,7 @@ package de.breuer.bateen.sensor;
 import lombok.Data;
 
 @Data
-public class AklsSensor implements Sensor<AklsSensor> {
-    private String sensorRecordId;
-
+public class AklsSensor extends AbstractSensor<AklsSensor> {
     private String anprNumberPlate;
     private int anprNumberPlateConfidence;
     private String anprCountry;

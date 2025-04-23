@@ -1,15 +1,11 @@
 package de.breuer.bateen.sensor;
 
-import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.time.LocalTime;
 
 @Data
-public class DsrcSensor implements Sensor<DsrcSensor> {
-    @Pattern(regexp = "^.{36}$", message = "StDataModel -> sensorRecordId must be 36 characters long")
-    private String sensorRecordId;
-
+public class DsrcSensor extends AbstractSensor<DsrcSensor> {
     private String recordTimeStamp;
     private String vehicleRegistrationPlate;
     private boolean speedingEvent;

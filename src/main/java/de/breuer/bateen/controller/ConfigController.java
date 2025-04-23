@@ -2,6 +2,10 @@ package de.breuer.bateen.controller;
 
 import de.breuer.bateen.config.BateenConfig;
 import de.breuer.bateen.model.Officer;
+import de.breuer.bateen.sensor.AklsSensor;
+import de.breuer.bateen.sensor.DsrcSensor;
+import de.breuer.bateen.sensor.IrCameraSensor;
+import de.breuer.bateen.sensor.VehicleSensor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -60,5 +64,37 @@ public class ConfigController {
             } else return null;
         }
         return null;
+    }
+
+    public static AklsSensor getAklsSensor() {
+        return bateenConfig.getAklsSensor();
+    }
+
+    public static void setAklsSensor(AklsSensor sensor) {
+        bateenConfig.setAklsSensor(sensor);
+    }
+
+    public static IrCameraSensor getIrCameraSensor() {
+        return bateenConfig.getIrCameraSensor();
+    }
+
+    public static void setIrCameraSensor(IrCameraSensor sensor) {
+        bateenConfig.setIrCameraSensor(sensor);
+    }
+
+    public static VehicleSensor getVehicleSensor() {
+        return bateenConfig.getVehicleSensor();
+    }
+
+    public static void setVehicleSensor(VehicleSensor sensor) {
+        bateenConfig.setVehicleSensor(sensor);
+    }
+
+    public static void setDsrcSensor(DsrcSensor sensor) {
+        bateenConfig.setDsrcSensor(sensor);
+    }
+
+    public static DsrcSensor getDsrcSensor() {
+        return bateenConfig.getDsrcSensor();
     }
 }

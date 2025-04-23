@@ -21,7 +21,7 @@ public class MainView extends VerticalLayout {
         setPadding(true);
 
         // Buttons
-        Button configureButton = createNavigationButton("Configure Test Case", "configure");
+        Button configureButton = createNavigationButton("Manually Test Case", "manual");
         Button automaticButton = createNavigationButton("Automatic Test Case", "automatic");
         Button vmButton = createNavigationButton("Change VM", "change-vm");
 
