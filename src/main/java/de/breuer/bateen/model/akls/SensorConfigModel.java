@@ -1,4 +1,4 @@
-package de.breuer.bateen.model.sensor;
+package de.breuer.bateen.model.akls;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
