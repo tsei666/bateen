@@ -55,7 +55,8 @@ public class StartView extends VerticalLayout {
         HorizontalLayout buttonLayout = new HorizontalLayout();
 
         buttonLayout.add(createTestObjectButton("Local", "localhost:50000"));
-        buttonLayout.add(createTestObjectButton("Remote", "192.168.1.100:50000"));
+        buttonLayout.add(createTestObjectButton("BREUER Crafter", "10.212.134.252:50000"));
+        buttonLayout.add(createTestObjectButton("BREUER TAP", "192.168.235.100:50000"));
         buttonLayout.add(createOtherButton());
 
         contentLayout.add(header, buttonLayout);

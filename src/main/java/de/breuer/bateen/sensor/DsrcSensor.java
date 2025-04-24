@@ -2,8 +2,6 @@ package de.breuer.bateen.sensor;
 
 import lombok.Data;
 
-import java.time.LocalTime;
-
 @Data
 public class DsrcSensor extends AbstractSensor<DsrcSensor> {
     private String recordTimeStamp;
@@ -72,8 +70,4 @@ public class DsrcSensor extends AbstractSensor<DsrcSensor> {
         this.fortnightlyDrivingTime = data.fortnightlyDrivingTime;
     }
 
-    @Override
-    public String getTimestamp() {
-        return LocalTime.now().toString();
-    }
 }

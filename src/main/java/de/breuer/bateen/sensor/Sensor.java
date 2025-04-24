@@ -7,6 +7,4 @@ public interface Sensor<T> {
 
     T getData();
     void setData(T data);
-
-    String getTimestamp();
 }

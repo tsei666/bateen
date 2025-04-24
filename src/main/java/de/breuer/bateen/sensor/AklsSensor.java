@@ -28,8 +28,4 @@ public class AklsSensor extends AbstractSensor<AklsSensor> {
         this.anprSideviewPicture = data.anprSideviewPicture;
     }
 
-    @Override
-    public String getTimestamp() {
-        return null;
-    }
 }

@@ -21,9 +21,4 @@ public class IrCameraSensor extends AbstractSensor<IrCameraSensor> {
         this.irMaxTempValues = data.irMaxTempValues;
         this.irMeanTempValues = data.irMeanTempValues;
     }
-
-    @Override
-    public String getTimestamp() {
-        return null;
-    }
 }

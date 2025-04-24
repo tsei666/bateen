@@ -25,7 +25,7 @@ public class DisplayServiceImpl implements DisplayService {
 
     @Override
     public ControlModeModel getControlMode() {
-        String uri = ConfigController.getUrl().concat(CONTROL_MODE_ENDPOINT);
+        String uri = safeUrl(CONTROL_MODE_ENDPOINT);
         ControlModeModel response = webClientBuilder.build().get()
                 .uri(uri)
                 .retrieve()
@@ -37,8 +37,7 @@ public class DisplayServiceImpl implements DisplayService {
 
     @Override
     public void putControlMode(ControlModeModel controlModeModel) {
-        String uri = ConfigController.getUrl().concat(CONTROL_MODE_ENDPOINT);
-
+        String uri = safeUrl(CONTROL_MODE_ENDPOINT);
         ControlModeDto dto = new ControlModeDto(controlModeModel.getMode());
 
         ResponseEntity<Void> response = webClientBuilder.build().put()
@@ -55,7 +54,7 @@ public class DisplayServiceImpl implements DisplayService {
 
     @Override
     public void putDeviceStatusModel(DeviceStatusModel deviceStatusModel) {
-        String uri = ConfigController.getUrl().concat(DEVICE_STATUS_ENDPOINT);
+        String uri = safeUrl(DEVICE_STATUS_ENDPOINT);
         ResponseEntity<Void> response = webClientBuilder.build().put()
                 .uri(uri)
                 .bodyValue(deviceStatusModel)
@@ -69,7 +68,7 @@ public class DisplayServiceImpl implements DisplayService {
 
     @Override
     public DeviceStatusModel getDeviceStatus() {
-        String uri = ConfigController.getUrl().concat(DEVICE_STATUS_ENDPOINT);
+        String uri = safeUrl(DEVICE_STATUS_ENDPOINT);
         DeviceStatusModel response = webClientBuilder.build().get()
                 .uri(uri)
                 .retrieve()
@@ -78,4 +77,13 @@ public class DisplayServiceImpl implements DisplayService {
         log.info("Device status response: {}", response);
         return response;
     }
+
+    private String safeUrl(String endpoint) {
+        String baseUrl = ConfigController.getUrl();
+        if (baseUrl == null || baseUrl.isBlank()) {
+            throw new IllegalStateException("No VM configured (ConfigController.getUrl() returned null)");
+        }
+        return baseUrl + endpoint;
+    }
+
 }

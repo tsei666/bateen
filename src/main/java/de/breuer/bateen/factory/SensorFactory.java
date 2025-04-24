@@ -1,7 +1,11 @@
 package de.breuer.bateen.factory;
 
 import de.breuer.bateen.controller.ConfigController;
-import de.breuer.bateen.sensor.*;
+import de.breuer.bateen.sensor.AklsSensor;
+import de.breuer.bateen.sensor.DsrcSensor;
+import de.breuer.bateen.sensor.IrCameraSensor;
+import de.breuer.bateen.sensor.VehicleSensor;
+import de.breuer.bateen.testcases.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
@@ -111,4 +115,20 @@ public class SensorFactory {
         sensor.setIrMeanTempValues(Collections.emptyList());
         return sensor;
     }
+
+    public void generateTestCase(String caseId) {
+        TestCaseGenerator testCase = switch (caseId.toUpperCase()) {
+            case "A" -> new TestCaseA();
+            case "B" -> new TestCaseB();
+            case "C" -> new TestCaseC();
+            case "D" -> new TestCaseD();
+            default -> throw new IllegalArgumentException("Unknown test case: " + caseId);
+        };
+        testCase.generateTestCase();
+    }
+
+    public void setExampleData() {
+        new TestCaseExample().generateTestCase();
+    }
+
 }

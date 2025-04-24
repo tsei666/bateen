@@ -19,7 +19,7 @@ import de.breuer.bateen.controller.ConfigController;
 import de.breuer.bateen.ui.display.DisplayView;
 import de.breuer.bateen.ui.login.LoginViewController;
 import de.breuer.bateen.ui.login.LoginViewModel;
-import de.breuer.bateen.ui.views.AutomaticTestView;
+import de.breuer.bateen.ui.automatic.AutomaticTestView;
 import de.breuer.bateen.ui.views.ChangeVmView;
 import de.breuer.bateen.ui.manually.ManuallyTestView;
 import de.breuer.bateen.ui.views.MainView;
@@ -62,6 +62,12 @@ public class MainLayout extends AppLayout {
         logo.getStyle().set("border-radius", "var(--lumo-border-radius-l)");
         layout.add(logo);
         viewTitle = new H1();
+        viewTitle.getStyle()
+                .set("margin", "0")
+                .set("white-space", "nowrap")
+                .set("overflow", "hidden")
+                .set("text-overflow", "ellipsis")
+                .set("width", "250px");
         layout.add(viewTitle);
 
         Span spacer = new Span();

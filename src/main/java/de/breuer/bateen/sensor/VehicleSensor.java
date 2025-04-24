@@ -37,9 +37,4 @@ public class VehicleSensor extends AbstractSensor<VehicleSensor>{
         this.hasWasteSign = data.hasWasteSign;
         this.isExtraWideVehicle = data.isExtraWideVehicle;
     }
-
-    @Override
-    public String getTimestamp() {
-        return null;
-    }
 }
