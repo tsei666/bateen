@@ -8,4 +8,5 @@ public interface SensorService {
     SensorConfigModel getSensorConfig();
     boolean updateStatus(SensorStatusModel sensorStatus);
     SensorUpdateInfoModel getSensorUpdateInfo();
+    void postSensorData();
 }

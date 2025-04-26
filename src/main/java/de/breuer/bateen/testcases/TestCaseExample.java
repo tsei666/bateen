@@ -1,6 +1,7 @@
 package de.breuer.bateen.testcases;
 
 import de.breuer.bateen.controller.ConfigController;
+import de.breuer.bateen.model.VehicleType;
 import de.breuer.bateen.sensor.AklsSensor;
 import de.breuer.bateen.sensor.DsrcSensor;
 import de.breuer.bateen.sensor.IrCameraSensor;
@@ -25,7 +26,7 @@ public class TestCaseExample implements TestCaseGenerator {
         VehicleSensor vehicle = new VehicleSensor();
         vehicle.setSensorRecordId("50f4df74-1473-4c1f-9bb1-16e364730198");
         vehicle.setVehicleWeightClass(400);
-        vehicle.setVehicleType(7);
+        vehicle.setVehicleType(VehicleType.TRUCK);
         vehicle.setVehicleHeight(200);
         vehicle.setVehicleWidth(370);
         vehicle.setVehicleLength(695);

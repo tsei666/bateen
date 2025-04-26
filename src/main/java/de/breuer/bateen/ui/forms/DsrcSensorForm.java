@@ -2,6 +2,7 @@ package de.breuer.bateen.ui.forms;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import de.breuer.bateen.sensor.DsrcSensor;
 import de.breuer.bateen.sensor.Sensor;
@@ -16,6 +17,7 @@ public class DsrcSensorForm implements SensorFormRenderer {
         DsrcSensor dsrc = (DsrcSensor) sensor.getData();
         FormLayout form = new FormLayout();
         form.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
+        H3 title = new H3("DSRC Sensor");
 
         addLiveTextField(form, "Record Timestamp", dsrc::getRecordTimeStamp, dsrc::setRecordTimeStamp, "Example: 2023-03-31T13:31:10.003+01:00");
         addLiveTextField(form, "Vehicle Registration Plate", dsrc::getVehicleRegistrationPlate, dsrc::setVehicleRegistrationPlate, "Example: BT.ST 133348");
@@ -48,7 +50,7 @@ public class DsrcSensorForm implements SensorFormRenderer {
         addLiveLongField(form, "Fortnightly Driving Time", dsrc::getFortnightlyDrivingTime, dsrc::setFortnightlyDrivingTime, "Example: 0");
 
         VerticalLayout wrapper = new VerticalLayout();
-        wrapper.add(form);
+        wrapper.add(title, form);
         return wrapper;
     }
 }

@@ -1,6 +1,7 @@
 package de.breuer.bateen.factory;
 
 import de.breuer.bateen.controller.ConfigController;
+import de.breuer.bateen.model.VehicleType;
 import de.breuer.bateen.sensor.AklsSensor;
 import de.breuer.bateen.sensor.DsrcSensor;
 import de.breuer.bateen.sensor.IrCameraSensor;
@@ -58,7 +59,7 @@ public class SensorFactory {
         VehicleSensor sensor = new VehicleSensor();
         sensor.setSensorRecordId("");
         sensor.setVehicleWeightClass(0);
-        sensor.setVehicleType(0);
+        sensor.setVehicleType(VehicleType.NONE);
         sensor.setVehicleHeight(0);
         sensor.setVehicleWidth(0);
         sensor.setVehicleLength(0);
@@ -118,9 +119,9 @@ public class SensorFactory {
 
     public void generateTestCase(String caseId) {
         TestCaseGenerator testCase = switch (caseId.toUpperCase()) {
-            case "A" -> new TestCaseA();
+            case "GREEN" -> new TestCaseGreen();
             case "B" -> new TestCaseB();
-            case "C" -> new TestCaseC();
+            case "RANDOM" -> new TestCaseRandom();
             case "D" -> new TestCaseD();
             default -> throw new IllegalArgumentException("Unknown test case: " + caseId);
         };

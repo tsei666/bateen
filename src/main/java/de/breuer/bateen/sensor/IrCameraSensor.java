@@ -1,14 +1,15 @@
 package de.breuer.bateen.sensor;
 
+import de.breuer.bateen.model.ir.IrImageModel;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
 public class IrCameraSensor extends AbstractSensor<IrCameraSensor> {
-    private List<String> irImages;
-    private List<Float> irMaxTempValues;
-    private List<Float> irMeanTempValues;
+    private List<IrImageModel> irImages;
+    private List<Integer> irMaxTempValues;
+    private List<Integer> irMeanTempValues;
 
     @Override
     public IrCameraSensor getData() {

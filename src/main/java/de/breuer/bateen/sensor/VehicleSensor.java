@@ -1,11 +1,12 @@
 package de.breuer.bateen.sensor;
 
+import de.breuer.bateen.model.VehicleType;
 import lombok.Data;
 
 @Data
 public class VehicleSensor extends AbstractSensor<VehicleSensor>{
     private int vehicleWeightClass;
-    private int vehicleType;
+    private VehicleType vehicleType;
     private int vehicleHeight;
     private int vehicleWidth;
     private int vehicleLength;

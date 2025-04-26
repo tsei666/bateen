@@ -2,6 +2,7 @@ package de.breuer.bateen.ui.forms;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import de.breuer.bateen.sensor.AklsSensor;
 import de.breuer.bateen.sensor.Sensor;
@@ -16,6 +17,7 @@ public class AklsSensorForm implements SensorFormRenderer {
         AklsSensor akls = (AklsSensor) sensor.getData();
         FormLayout formLayout = new FormLayout();
         formLayout.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
+        H3 title = new H3("AKLS Sensor");
 
         addLiveTextField(formLayout, "License Plate", akls::getAnprNumberPlate, akls::setAnprNumberPlate, "Example: ST 133348");
         addLiveIntegerField(formLayout, "License Plate Confidence", akls::getAnprNumberPlateConfidence, akls::setAnprNumberPlateConfidence, "Example: 60");
@@ -26,7 +28,7 @@ public class AklsSensorForm implements SensorFormRenderer {
         addImageSelector("anprSideviewPicture", akls::getAnprSideviewPicture, akls::setAnprSideviewPicture, formLayout);
 
         VerticalLayout wrapper = new VerticalLayout();
-        wrapper.add(formLayout);
+        wrapper.add(title, formLayout);
         return wrapper;
     }
 }

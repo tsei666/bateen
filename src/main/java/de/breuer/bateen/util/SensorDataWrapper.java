@@ -59,7 +59,7 @@ public class SensorDataWrapper {
 
         if (vehicleSensor != null) {
             model.setVehicleWeightClass(vehicleSensor.getVehicleWeightClass());
-            model.setVehicleType(vehicleSensor.getVehicleType());
+            model.setVehicleType(vehicleSensor.getVehicleType().getId());
             model.setVehicleHeight(vehicleSensor.getVehicleHeight());
             model.setVehicleWidth(vehicleSensor.getVehicleWidth());
             model.setVehicleLength(vehicleSensor.getVehicleLength());

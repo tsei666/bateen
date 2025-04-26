@@ -1,5 +1,6 @@
 package de.breuer.bateen.ui.components;
 
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import de.breuer.bateen.sensor.AklsSensor;
@@ -11,8 +12,10 @@ public class AklsSensorCard extends VerticalLayout {
         setPadding(false);
         setSpacing(false);
         setStyle();
+        H3 title = new H3("AKLS Sensor");
 
         add(
+                title,
                 new Paragraph("License Plate: " + akls.getAnprNumberPlate()),
                 new Paragraph("License Plate Confidence: " + akls.getAnprNumberPlateConfidence()),
                 new Paragraph("Country: " + akls.getAnprCountry()),

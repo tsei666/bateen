@@ -50,7 +50,7 @@ public class ManuallyTestView extends VerticalLayout {
 
     private Button createContinueButton() {
         Button button = new Button("Continue", event -> {
-            // getUI().ifPresent(ui -> ui.navigate("next-step"));
+            getUI().ifPresent(ui -> ui.navigate("sensor-summary"));
         });
 
         button.getStyle()

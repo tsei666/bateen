@@ -2,24 +2,30 @@ package de.breuer.bateen.util;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.server.StreamResource;
+import de.breuer.bateen.model.VehicleType;
+import de.breuer.bateen.model.ir.IrImageModel;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.file.Files;
 import java.util.*;
-import java.util.function.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public final class FormFieldHelper {
 
-    private FormFieldHelper() {}
+    private FormFieldHelper() {
+    }
 
     public static void addLiveTextField(FormLayout layout, String label, Supplier<String> getter, Consumer<String> setter, String helperText) {
         TextField tf = new TextField(label);
@@ -105,6 +111,27 @@ public final class FormFieldHelper {
         formLayout.add(base64Preview, selectImageButton);
     }
 
+    public static void addIrImageSelectorList(String fieldName, List<IrImageModel> current, Consumer<List<IrImageModel>> setter, FormLayout formLayout) {
+        TextField previewField = new TextField(fieldName + " (Images)");
+        previewField.setReadOnly(true);
+        previewField.setWidthFull();
+        previewField.setValue("Images: " + (current != null ? current.size() : 0) + " entries");
+
+        Button selectImageButton = new Button("Select image", e -> openImageDialog(fieldName, base64 -> {
+            List<IrImageModel> updated = current != null ? new ArrayList<>(current) : new ArrayList<>();
+            IrImageModel newImage = new IrImageModel();
+            newImage.setRawData(base64);
+            newImage.setType("UNKNOWN"); // Oder ein sinnvoller Standardwert
+            newImage.setTimestamp((int) System.currentTimeMillis());
+            updated.add(newImage);
+            setter.accept(updated);
+            previewField.setValue("Images: " + updated.size() + " entries");
+        }));
+
+        formLayout.add(previewField, selectImageButton);
+    }
+
+
     private static void openImageDialog(String fieldName, Consumer<String> onImageSelected) {
         Dialog dialog = new Dialog();
         dialog.setHeaderTitle("Select image for: " + fieldName);
@@ -146,4 +173,35 @@ public final class FormFieldHelper {
         dialog.setHeight("400px");
         dialog.open();
     }
+
+    public static void addVehicleTypeComboBox(FormLayout layout, String label, Supplier<VehicleType> getter, Consumer<VehicleType> setter) {
+        ComboBox<VehicleType> comboBox = new ComboBox<>(label);
+        comboBox.setHelperText("Choose the vehicle type");
+        comboBox.setWidthFull();
+        comboBox.setItems(VehicleType.values());
+        comboBox.setItemLabelGenerator(VehicleType::toString);
+        comboBox.setValue(Optional.ofNullable(getter.get()).orElse(VehicleType.NONE));
+        comboBox.addValueChangeListener(event -> setter.accept(event.getValue()));
+        layout.add(comboBox);
+    }
+
+    public static void addLiveIntegerListField(FormLayout form, String label, List<Integer> list, Consumer<List<Integer>> setter) {
+        TextArea field = new TextArea(label);
+        field.setValue(list != null ? list.toString() : "[]");
+        field.addValueChangeListener(event -> {
+            try {
+                String value = event.getValue().replaceAll("[\\[\\]]", "");
+                List<Integer> newList = Arrays.stream(value.split(","))
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .map(Integer::parseInt)
+                        .toList();
+                setter.accept(newList);
+            } catch (NumberFormatException e) {
+                // ignore invalid input for now
+            }
+        });
+        form.add(field);
+    }
+
 }

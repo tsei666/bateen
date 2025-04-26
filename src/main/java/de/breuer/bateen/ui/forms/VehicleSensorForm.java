@@ -2,6 +2,7 @@ package de.breuer.bateen.ui.forms;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import de.breuer.bateen.sensor.Sensor;
 import de.breuer.bateen.sensor.VehicleSensor;
@@ -16,9 +17,10 @@ public class VehicleSensorForm implements SensorFormRenderer {
         VehicleSensor vehicle = (VehicleSensor) sensor.getData();
         FormLayout form = new FormLayout();
         form.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1));
+        H3 title = new H3("Vehicle Sensor");
 
         addLiveIntegerField(form, "Weight Class", vehicle::getVehicleWeightClass, vehicle::setVehicleWeightClass, "Example: 400");
-        addLiveIntegerField(form, "Vehicle Type", vehicle::getVehicleType, vehicle::setVehicleType, "Example: 7");
+        addVehicleTypeComboBox(form, "Vehicle Type", vehicle::getVehicleType, vehicle::setVehicleType);
         addLiveIntegerField(form, "Height", vehicle::getVehicleHeight, vehicle::setVehicleHeight, "Example: 200");
         addLiveIntegerField(form, "Width", vehicle::getVehicleWidth, vehicle::setVehicleWidth, "Example: 370");
         addLiveIntegerField(form, "Length", vehicle::getVehicleLength, vehicle::setVehicleLength, "Example: 695");
@@ -31,7 +33,7 @@ public class VehicleSensorForm implements SensorFormRenderer {
         addLiveCheckbox(form, "Extra Wide Vehicle", vehicle::isExtraWideVehicle, vehicle::setExtraWideVehicle);
 
         VerticalLayout wrapper = new VerticalLayout();
-        wrapper.add(form);
+        wrapper.add(title, form);
         return wrapper;
     }
 }
