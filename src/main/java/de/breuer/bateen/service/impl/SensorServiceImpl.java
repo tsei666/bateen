@@ -51,33 +51,55 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public void postSensorData() {
-        // Standardablauf: START -> END -> COMPLETED -> Abschluss (6)
-        postSensorData(SensorRecordState.START);
-        sleep(500); // Kurze Pause
-        postSensorData(SensorRecordState.END);
-        sleep(500); // Kurze Pause
-        postSensorData(SensorRecordState.COMPLETED);
-        sleep(500); // Abschlusszustand
-        postSensorData(SensorRecordState.getById(6));
+        log.info("Start sending sensor data");
+        SensorDataModel dataModel = setSensorDataModel();
+        postSensorData(dataModel, SensorRecordState.START);
+        sleep(500);
+        postSensorData(dataModel, SensorRecordState.END);
+        sleep(500);
+        postSensorData(dataModel, SensorRecordState.COMPLETED);
+        sleep(500);
+        postSensorData(dataModel, SensorRecordState.getById(6));
     }
 
-    public void postSensorData(SensorRecordState state) {
-        AklsSensor akls = ConfigController.getAklsSensor();
-        VehicleSensor vehicle = ConfigController.getVehicleSensor();
-        IrCameraSensor irCamera = ConfigController.getIrCameraSensor();
-        DsrcSensor dsrcSensor = ConfigController.getDsrcSensor();
+    public void postSensorData(SensorDataModel dataModel, SensorRecordState state) {
         String url = ConfigController.getUrl();
-
         if (url == null || url.isEmpty()) {
             log.error("Cannot send sensor data: URL is not configured");
             return;
         }
-
         String uri = url + "/koda/sensors-if/sensor-data";
 
-        SensorDataModel dataModel = SensorDataModel.builder()
+        dataModel.setSensorRecordState(state.getId());
+
+        try {
+            ResponseEntity<Void> response = webClientBuilder.build()
+                    .post()
+                    .uri(uri)
+                    .bodyValue(dataModel)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block();
+
+            if (response != null && response.getStatusCode() == HttpStatus.CREATED) {
+                log.info("SensorDataModel (state {}) sent successfully", state);
+            } else {
+                log.warn("SensorDataModel send failed for state {}: {}", state, response != null ? response.getStatusCode() : "No response");
+            }
+
+        } catch (Exception e) {
+            log.error("Failed to send SensorDataModel with state {}", state, e);
+        }
+    }
+
+    private SensorDataModel setSensorDataModel() {
+        AklsSensor akls = ConfigController.getAklsSensor();
+        VehicleSensor vehicle = ConfigController.getVehicleSensor();
+        IrCameraSensor irCamera = ConfigController.getIrCameraSensor();
+        DsrcSensor dsrcSensor = ConfigController.getDsrcSensor();
+
+        return SensorDataModel.builder()
                 .sensorRecordId(akls.getSensorRecordId())
-                .sensorRecordState(state.getId())
                 .recordTimeStamp(dsrcSensor.getRecordTimeStamp())
                 .anprNumberPlate(akls.getAnprNumberPlate())
                 .anprNumberPlateConfidence(akls.getAnprNumberPlateConfidence())
@@ -102,27 +124,6 @@ public class SensorServiceImpl implements SensorService {
                 .isComplete(false)
                 .incompleteReason(List.of(3))
                 .build();
-
-        log.info("DATAMODEL: " + dataModel.toString() );
-
-        try {
-            ResponseEntity<Void> response = webClientBuilder.build()
-                    .post()
-                    .uri(uri)
-                    .bodyValue(dataModel)
-                    .retrieve()
-                    .toBodilessEntity()
-                    .block();
-
-            if (response != null && response.getStatusCode() == HttpStatus.CREATED) {
-                log.info("SensorDataModel (state {}) sent successfully", state);
-            } else {
-                log.warn("SensorDataModel send failed for state {}: {}", state, response != null ? response.getStatusCode() : "No response");
-            }
-
-        } catch (Exception e) {
-            log.error("Failed to send SensorDataModel with state {}", state, e);
-        }
     }
 
     private void sleep(long millis) {

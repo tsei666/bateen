@@ -11,6 +11,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import de.breuer.bateen.VmRepository;
+import de.breuer.bateen.config.VmConfig;
 import de.breuer.bateen.controller.ConfigController;
 import de.breuer.bateen.ui.layout.MainLayout;
 
@@ -31,17 +33,18 @@ public class ChangeVmView extends VerticalLayout {
 
         H2 title = new H2("Change Virtual Machine Connection");
 
-        HorizontalLayout buttons = new HorizontalLayout(
-                createUrlButton("Local", "localhost:50000"),
-                createUrlButton("Remote", "192.168.1.100:50000"),
-                createCustomUrlButton()
-        );
+        HorizontalLayout buttonLayout = new HorizontalLayout();
+
+        for (VmConfig vm : VmRepository.getAvailableVms()) {
+            buttonLayout.add(createUrlButton(vm.getName(), vm.getUrl()));
+        }
+        buttonLayout.add(createCustomUrlButton());
 
         saveButton = new Button("Apply Configuration", e -> saveUrl());
         saveButton.setEnabled(false);
         saveButton.setWidth("300px");
 
-        add(title, buttons, new Span(), saveButton);
+        add(title, buttonLayout, new Span(), saveButton);
     }
 
     private Button createUrlButton(String label, String url) {

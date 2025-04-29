@@ -14,6 +14,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import de.breuer.bateen.VmRepository;
+import de.breuer.bateen.config.VmConfig;
 import de.breuer.bateen.controller.ConnectionController;
 import de.breuer.bateen.ui.layout.StartLayout;
 import lombok.extern.slf4j.Slf4j;
@@ -54,9 +56,9 @@ public class StartView extends VerticalLayout {
         H2 header = new H2("Select the test object");
         HorizontalLayout buttonLayout = new HorizontalLayout();
 
-        buttonLayout.add(createTestObjectButton("Local", "localhost:50000"));
-        buttonLayout.add(createTestObjectButton("BREUER Crafter", "10.212.134.252:50000"));
-        buttonLayout.add(createTestObjectButton("BREUER TAP", "192.168.235.100:50000"));
+        for (VmConfig vm : VmRepository.getAvailableVms()) {
+            buttonLayout.add(createTestObjectButton(vm.getName(), vm.getUrl()));
+        }
         buttonLayout.add(createOtherButton());
 
         contentLayout.add(header, buttonLayout);

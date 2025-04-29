@@ -16,12 +16,13 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.StreamResource;
 import de.breuer.bateen.controller.ConfigController;
+import de.breuer.bateen.ui.automatic.AutomaticTestView;
 import de.breuer.bateen.ui.display.DisplayView;
+import de.breuer.bateen.ui.ir.IrCameraView;
 import de.breuer.bateen.ui.login.LoginViewController;
 import de.breuer.bateen.ui.login.LoginViewModel;
-import de.breuer.bateen.ui.automatic.AutomaticTestView;
-import de.breuer.bateen.ui.views.ChangeVmView;
 import de.breuer.bateen.ui.manually.ManuallyTestView;
+import de.breuer.bateen.ui.views.ChangeVmView;
 import de.breuer.bateen.ui.views.MainView;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -156,7 +157,8 @@ public class MainLayout extends AppLayout {
                 createTab("Manually Test", ManuallyTestView.class),
                 createTab("Automatic Test", AutomaticTestView.class),
                 createTab("Change VM", ChangeVmView.class),
-                createTab("7-Display", DisplayView.class)
+                createTab("7-Display", DisplayView.class),
+                createTab("IrCamera", IrCameraView.class)
         };
     }
 

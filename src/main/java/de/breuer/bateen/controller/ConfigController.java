@@ -1,7 +1,9 @@
 package de.breuer.bateen.controller;
 
 import de.breuer.bateen.config.BateenConfig;
+import de.breuer.bateen.model.Display;
 import de.breuer.bateen.model.Officer;
+import de.breuer.bateen.model.ir.IrConfigModel;
 import de.breuer.bateen.sensor.AklsSensor;
 import de.breuer.bateen.sensor.DsrcSensor;
 import de.breuer.bateen.sensor.IrCameraSensor;
@@ -96,5 +98,24 @@ public class ConfigController {
 
     public static DsrcSensor getDsrcSensor() {
         return bateenConfig.getDsrcSensor();
+    }
+
+    public static void setIrConfigModel(IrConfigModel irConfigModel) {
+        bateenConfig.setIrConfigModel(irConfigModel);
+    }
+
+    public static IrConfigModel getIrConfigModel() {
+        return bateenConfig.getIrConfigModel();
+    }
+
+    public static Display getDisplay() {
+        if (bateenConfig.getDisplay() == null) {
+            return new Display();
+        }
+        return bateenConfig.getDisplay();
+    }
+
+    public static void setDisplay(Display display) {
+        bateenConfig.setDisplay(display);
     }
 }

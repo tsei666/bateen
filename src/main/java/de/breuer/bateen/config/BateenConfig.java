@@ -2,6 +2,7 @@ package de.breuer.bateen.config;
 
 import de.breuer.bateen.model.Display;
 import de.breuer.bateen.model.Officer;
+import de.breuer.bateen.model.ir.IrConfigModel;
 import de.breuer.bateen.sensor.AklsSensor;
 import de.breuer.bateen.sensor.DsrcSensor;
 import de.breuer.bateen.sensor.IrCameraSensor;
@@ -18,8 +19,9 @@ public class BateenConfig {
     private String graphqlUrl;
     private List<Officer> officers;
     private Display display;
-    private AklsSensor aklsSensor = new AklsSensor();
-    private IrCameraSensor irCameraSensor = new IrCameraSensor();
-    private VehicleSensor vehicleSensor = new VehicleSensor();
-    private DsrcSensor dsrcSensor = new DsrcSensor();
+    private AklsSensor aklsSensor;
+    private IrCameraSensor irCameraSensor;
+    private VehicleSensor vehicleSensor;
+    private DsrcSensor dsrcSensor;
+    private IrConfigModel irConfigModel;
 }
