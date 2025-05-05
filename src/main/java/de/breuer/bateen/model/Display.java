@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class Display {
-    private ControlModeModel controlMode;
+    private ControlModeModel controlMode = ControlModeModel.CONTROL_MODE_INVALID;
     private DeviceStatusModel deviceStatus;
 
     public void setControlMode(int controlMode) {

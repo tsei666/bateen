@@ -1,6 +1,7 @@
 package de.breuer.bateen.ui.ir;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
@@ -13,6 +14,9 @@ import de.breuer.bateen.model.ir.IrStatusModel;
 import de.breuer.bateen.ui.layout.MainLayout;
 import jakarta.annotation.security.PermitAll;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Route(value = "ir-camera", layout = MainLayout.class)
 @PageTitle("IR Camera View")
 @PermitAll
@@ -21,6 +25,11 @@ public class IrCameraView extends VerticalLayout {
     private final IrCameraViewController controller;
     private IrStatusModel irStatusModel;
     private final VerticalLayout statusLayout = new VerticalLayout();
+    private final Span feedbackMessage = new Span();
+
+    private static final List<String> ERROR_MESSAGES = Arrays.asList(
+            "on", "off", "error", "connected", "disconnected", "none", "update", "warning"
+    );
 
     public IrCameraView(IrCameraViewController controller) {
         this.controller = controller;
@@ -54,27 +63,41 @@ public class IrCameraView extends VerticalLayout {
         irStatusModel.setDemoIsOn(irConfig.isDemoOn());
         irStatusModel.setSensorsAreOn(irConfig.isSensorsOn());
         irStatusModel.setHasError(false);
-        irStatusModel.setErrorMessage("");
+        irStatusModel.setErrorMessage("none");
 
-        H2 title = new H2("IR Camera Configuration");
+        H2 title = new H2("IR Camera Status");
         title.getStyle().set("text-align", "center");
 
-        Button toggleSensorsOn = new Button("Toggle Sensors On", e -> {
+        // Toggle-Buttons
+        Button toggleSensorsOn = new Button("Toggle Sensors", e -> {
             irStatusModel.setSensorsAreOn(!Boolean.TRUE.equals(irStatusModel.getSensorsAreOn()));
             updateStatusLayout();
         });
 
-        Button toggleDemoOn = new Button("Toggle Demo On", e -> {
+        Button toggleDemoOn = new Button("Toggle Demo", e -> {
             irStatusModel.setDemoIsOn(!Boolean.TRUE.equals(irStatusModel.getDemoIsOn()));
             updateStatusLayout();
         });
 
+        ComboBox<String> errorMessageSelect = new ComboBox<>("Select Error Message");
+        errorMessageSelect.setItems(ERROR_MESSAGES);
+        errorMessageSelect.setValue(irStatusModel.getErrorMessage());
+        errorMessageSelect.addValueChangeListener(event -> {
+            String value = event.getValue();
+            irStatusModel.setErrorMessage(value);
+            irStatusModel.setHasError(!"none".equals(value));
+            updateStatusLayout();
+        });
+
+        // Senden-Button
         Button sendIrStatus = new Button("Send IR Status", e -> {
-            controller.sendIrStatus(irStatusModel);
+            boolean success = controller.sendIrStatus(irStatusModel);
+            showFeedback(success);
         });
 
         toggleSensorsOn.getStyle().set("margin", "10px");
         toggleDemoOn.getStyle().set("margin", "10px");
+        errorMessageSelect.getStyle().set("margin", "10px");
         sendIrStatus.getStyle()
                 .set("background-color", "#4CAF50")
                 .set("color", "white")
@@ -83,42 +106,51 @@ public class IrCameraView extends VerticalLayout {
                 .set("border-radius", "6px")
                 .set("margin", "10px 0");
 
+        feedbackMessage.getStyle()
+                .set("font-size", "1.1em")
+                .set("margin-top", "10px");
+
         add(
                 title,
-                coloredSpan("Initial SensorsOn: ", irConfig.isSensorsOn()),
-                coloredSpan("Initial DemoOn: ", irConfig.isDemoOn()),
                 toggleSensorsOn,
                 toggleDemoOn,
+                errorMessageSelect,
                 statusLayout,
-                sendIrStatus
+                sendIrStatus,
+                feedbackMessage
         );
 
-        updateStatusLayout(); // Direkt Status anzeigen
+        updateStatusLayout();
     }
 
     private void updateStatusLayout() {
         statusLayout.removeAll();
+        statusLayout.setSpacing(true);
+        statusLayout.setPadding(true);
+        statusLayout.setAlignItems(Alignment.CENTER);
 
-        Span currentStatus = new Span(
-                "Current IR Status -> " +
-                "SensorsOn: " + (Boolean.TRUE.equals(irStatusModel.getSensorsAreOn()) ? "ON" : "OFF") +
-                ", DemoOn: " + (Boolean.TRUE.equals(irStatusModel.getDemoIsOn()) ? "ON" : "OFF") +
-                ", HasError: " + (Boolean.TRUE.equals(irStatusModel.getHasError()) ? "YES" : "NO") +
-                ", ErrorMessage: " + (irStatusModel.getErrorMessage() != null ? irStatusModel.getErrorMessage() : "None")
-        );
-        currentStatus.getStyle()
-                .set("font-size", "1.1em")
-                .set("margin", "20px 0")
-                .set("text-align", "center");
+        Span sensorsStatus = new Span("Sensors: " + (Boolean.TRUE.equals(irStatusModel.getSensorsAreOn()) ? "ON" : "OFF"));
+        sensorsStatus.getStyle().set("color", Boolean.TRUE.equals(irStatusModel.getSensorsAreOn()) ? "green" : "red");
 
-        statusLayout.add(currentStatus);
+        Span demoStatus = new Span("Demo Mode: " + (Boolean.TRUE.equals(irStatusModel.getDemoIsOn()) ? "ON" : "OFF"));
+        demoStatus.getStyle().set("color", Boolean.TRUE.equals(irStatusModel.getDemoIsOn()) ? "green" : "red");
+
+        Span errorStatus = new Span("Has Error: " + (Boolean.TRUE.equals(irStatusModel.getHasError()) ? "YES" : "NO"));
+        errorStatus.getStyle().set("color", Boolean.TRUE.equals(irStatusModel.getHasError()) ? "red" : "green");
+
+        Span errorMessageStatus = new Span("Error Message: " + (irStatusModel.getErrorMessage() != null ? irStatusModel.getErrorMessage() : "None"));
+        errorMessageStatus.getStyle().set("font-weight", "bold");
+
+        statusLayout.add(sensorsStatus, demoStatus, errorStatus, errorMessageStatus);
     }
 
-    private Span coloredSpan(String label, boolean isOn) {
-        Span span = new Span(label + (isOn ? "ON" : "OFF"));
-        span.getStyle()
-                .set("color", isOn ? "green" : "red")
-                .set("font-weight", "bold");
-        return span;
+    private void showFeedback(boolean success) {
+        if (success) {
+            feedbackMessage.setText("Status erfolgreich gesendet.");
+            feedbackMessage.getStyle().set("color", "green");
+        } else {
+            feedbackMessage.setText("Fehler beim Senden des Status.");
+            feedbackMessage.getStyle().set("color", "red");
+        }
     }
 }

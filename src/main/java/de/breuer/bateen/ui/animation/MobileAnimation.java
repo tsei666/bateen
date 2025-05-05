@@ -1,51 +1,32 @@
 package de.breuer.bateen.ui.animation;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.dom.Element;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@CssImport("./styles/animationStyles.css")
 public class MobileAnimation implements AnimationBuilder {
 
     private Div controlVehicle;
-
-    public Div getControlVehicle() {
-        return controlVehicle;
-    }
+    private Div truck;
 
     @Override
     public void build(HorizontalLayout scene, Component parentView) {
         getCentralStrips().forEach(scene::add);
 
-        Div truck = new Div();
-        truck.getStyle()
-                .set("background-image", "url('/images/Truck.png')")
-                .set("background-size", "contain")
-                .set("background-repeat", "no-repeat")
-                .set("background-position", "center")
-                .set("transform", "rotate(-90deg)")
-                .set("width", "400px")
-                .set("height", "300px")
-                .set("position", "absolute")
-                .set("top", "70px")
-                .set("left", "40%");
+        truck = new Div();
+        truck.addClassName("static-truck");
         scene.add(truck);
 
         controlVehicle = new Div();
-        controlVehicle.getStyle()
-                .set("background-image", "url('/images/crafter.png')")
-                .set("background-size", "contain")
-                .set("background-repeat", "no-repeat")
-                .set("background-position", "center")
-                .set("transform", "rotate(-90deg)")
-                .set("width", "290px")
-                .set("height", "220px")
-                .set("position", "absolute")
-                .set("top", "-40px")
-                .set("left", "-150px");
+        controlVehicle.addClassName("moving-vehicle");
         scene.add(controlVehicle);
 
         Element parentElement = parentView.getElement();
@@ -55,9 +36,8 @@ public class MobileAnimation implements AnimationBuilder {
                 animationCss
         );
 
-        // Animation starten
         controlVehicle.getStyle().set("animation", "driveVan 10s linear infinite");
-        controlVehicle.getStyle().set("animation-play-state", "running");
+        controlVehicle.getStyle().set("animation-play-state", "paused");
     }
 
     private List<Div> getCentralStrips() {

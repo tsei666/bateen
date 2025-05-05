@@ -1,51 +1,32 @@
 package de.breuer.bateen.ui.animation;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.dom.Element;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@CssImport("./styles/animationStyles.css")
 public class StationaryAnimation implements AnimationBuilder {
 
     private Div truck;
-
-    public Div getTruck() {
-        return truck;
-    }
+    private Div controlVehicle;
 
     @Override
     public void build(HorizontalLayout scene, Component parentView) {
         getCentralStrips().forEach(scene::add);
 
-        Div controlVehicle = new Div();
-        controlVehicle.getStyle()
-                .set("background-image", "url('/images/crafter.png')")
-                .set("background-size", "contain")
-                .set("background-repeat", "no-repeat")
-                .set("background-position", "center")
-                .set("transform", "rotate(-90deg)")
-                .set("width", "290px")
-                .set("height", "220px")
-                .set("position", "absolute")
-                .set("top", "110px")
-                .set("left", "40%");
+        controlVehicle = new Div();
+        controlVehicle.addClassName("static-vehicle");
         scene.add(controlVehicle);
 
         truck = new Div();
-        truck.getStyle()
-                .set("background-image", "url('/images/Truck.png')")
-                .set("background-size", "contain")
-                .set("background-repeat", "no-repeat")
-                .set("background-position", "center")
-                .set("transform", "rotate(-90deg)")
-                .set("width", "400px")
-                .set("height", "300px")
-                .set("position", "absolute")
-                .set("top", "-90px")
-                .set("left", "-150px");
+        truck.addClassName("moving-truck");
         scene.add(truck);
 
         Element parentElement = parentView.getElement();
@@ -55,7 +36,7 @@ public class StationaryAnimation implements AnimationBuilder {
                 animationCss
         );
         truck.getStyle().set("animation", "driveLKW 10s linear infinite");
-        truck.getStyle().set("animation-play-state", "running");
+        truck.getStyle().set("animation-play-state", "paused");
     }
 
     private List<Div> getCentralStrips() {

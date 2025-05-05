@@ -4,8 +4,10 @@ import de.breuer.bateen.controller.ConfigController;
 import de.breuer.bateen.controller.IrCameraController;
 import de.breuer.bateen.model.ir.IrConfigModel;
 import de.breuer.bateen.model.ir.IrStatusModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class IrCameraViewController {
 
@@ -16,14 +18,25 @@ public class IrCameraViewController {
     }
 
     public boolean isVmConnected() {
-        return !ConfigController.getUrl().isBlank() || !ConfigController.getUrl().isEmpty();
+        try {
+            return !ConfigController.getUrl().isBlank() || !ConfigController.getUrl().isEmpty();
+        } catch (Exception e) {
+            log.error("Failed to check VM connection", e);
+        }
+        return false;
     }
 
     public IrConfigModel getIrConfig() {
         return irCameraController.getIrConfig();
     }
 
-    public void sendIrStatus(IrStatusModel irStatus) {
-        irCameraController.updateIr(irStatus);
+    public boolean sendIrStatus(IrStatusModel irStatus) {
+        try {
+            irCameraController.updateIr(irStatus);
+            return true;
+        } catch (Exception e) {
+            log.error("Failed to send IR status", e);
+        }
+        return false;
     }
 }

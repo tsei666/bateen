@@ -18,10 +18,12 @@ import java.util.List;
 public class ConfigController {
 
     static BateenConfig bateenConfig;
+    static DisplayController displayController;
 
     @Autowired
-    public ConfigController(BateenConfig bateenConfig) {
+    public ConfigController(BateenConfig bateenConfig, DisplayController displayController) {
         ConfigController.bateenConfig = bateenConfig;
+        this.displayController = displayController;
     }
 
     public static String getUrl() {
@@ -31,6 +33,7 @@ public class ConfigController {
     public static void setUrl(String url) {
         bateenConfig.setUrl(String.format("http://%s", url));
         setGraphqlUrl(url);
+        displayController.getDisplay();
     }
 
     public static String getGraphqlUrl() {

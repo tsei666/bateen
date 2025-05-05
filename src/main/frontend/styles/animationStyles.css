@@ -1,0 +1,51 @@
+.static-truck {
+    background-image: url('../images/Truck.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: rotate(-90deg);
+    width: 400px;
+    height: 300px;
+    position: absolute;
+    top: 70px;
+    left: 40%;
+}
+
+.moving-vehicle {
+    background-image: url('../images/crafter.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: rotate(-90deg);
+    width: 290px;
+    height: 220px;
+    position: absolute;
+    top: -40px;
+    left: -150px;
+}
+
+.static-vehicle {
+    background-image: url('../images/crafter.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: rotate(-90deg);
+    width: 290px;
+    height: 220px;
+    position: absolute;
+    top: 110px;
+    left: 40%;
+}
+
+.moving-truck {
+    background-image: url('../images/Truck.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: rotate(-90deg);
+    width: 400px;
+    height: 300px;
+    position: absolute;
+    top: -90px;
+    left: -150px;
+}
