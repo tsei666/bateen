@@ -11,9 +11,12 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import de.breuer.bateen.ui.display.DisplayView;
 import de.breuer.bateen.ui.layout.MainLayout;
+import jakarta.annotation.security.PermitAll;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Route(value = "animation", layout = MainLayout.class)
 @PageTitle("Animation")
+@PermitAll
 public class AnimationView extends VerticalLayout {
 
     private boolean animationRunning = false;
@@ -25,6 +28,11 @@ public class AnimationView extends VerticalLayout {
     private Button controlButton;
     private Button resetButton;
     private int stopCount = 0;
+
+    private final VerticalLayout logBox = new VerticalLayout();
+
+    @Autowired
+    private AnimationViewController animationViewController;
 
     public AnimationView() {
         setWidthFull();
@@ -52,13 +60,11 @@ public class AnimationView extends VerticalLayout {
         } else if (builder instanceof MobileAnimation mobile) {
             this.animatedDiv = mobile.getControlVehicle();
             this.staticDiv = mobile.getTruck();
-        } else {
-            this.animatedDiv = null;
-            this.staticDiv = null;
         }
 
         add(scene);
         setupControlButtons();
+        setupLogBox();
 
         if (animatedDiv != null) {
             animatedDiv.getElement().executeJs(
@@ -120,6 +126,26 @@ public class AnimationView extends VerticalLayout {
         add(buttonLayout);
     }
 
+    private void setupLogBox() {
+        logBox.setWidth("80%");
+        logBox.setMaxHeight("200px"); // Maximalhöhe definieren
+        logBox.getStyle()
+                .set("background-color", "#f1f1f1")
+                .set("padding", "10px")
+                .set("border-radius", "5px")
+                .set("overflow-y", "auto")  // Vertikales Scrollen
+                .set("white-space", "pre-wrap") // Zeilenumbruch für lange Texte
+                .set("word-break", "break-word"); // Lange Worte umbrechen
+        add(logBox);
+    }
+
+    private void updateLogBox() {
+        logBox.removeAll();
+        for (String message : animationViewController.getLogMessages()) {
+            logBox.add(new Span(message));
+        }
+    }
+
     private void controlButtonAction() {
         if (!animationRunning && !wasAutomaticallyStopped && stopCount == 0) {
             startAnimation();
@@ -130,7 +156,7 @@ public class AnimationView extends VerticalLayout {
 
     private void startAnimation() {
         if (animatedDiv != null) {
-            controlButton.setEnabled(false); // Button sperren
+            controlButton.setEnabled(false);
             animatedDiv.getElement().executeJs(
                     """
                     this.style.left = '-150px';
@@ -153,38 +179,22 @@ public class AnimationView extends VerticalLayout {
 
     private void resumeAnimation() {
         if (animatedDiv != null) {
-            controlButton.setEnabled(false); // Button sperren
-            animatedDiv.getElement().executeJs(
-                    """
-                    if (this._monitoringFrame) {
-                        cancelAnimationFrame(this._monitoringFrame);
-                        this._monitoringFrame = null;
-                    }
-                    """
-            );
+            controlButton.setEnabled(false);
+            animatedDiv.getElement().executeJs("if (this._monitoringFrame) { cancelAnimationFrame(this._monitoringFrame); this._monitoringFrame = null; }");
 
             animatedDiv.getStyle().set("animation-play-state", "running");
             animationRunning = true;
             wasAutomaticallyStopped = false;
 
-            if (stopCount == 0) {
-                monitorStop0();
-            } else if (stopCount == 1) {
-                monitorStop1();
-            } else if (stopCount == 2) {
-                monitorStop2();
-            } else if (stopCount == 3) {
+            if (stopCount == 0) monitorStop0();
+            else if (stopCount == 1) monitorStop1();
+            else if (stopCount == 2) monitorStop2();
+            else if (stopCount == 3) {
                 stopCount = 4;
+                animationViewController.sendCompleted();
+                updateLogBox();
                 controlButton.setEnabled(false);
             }
-        }
-    }
-
-
-    private void pauseAnimation() {
-        if (animatedDiv != null) {
-            animatedDiv.getStyle().set("animation-play-state", "paused");
-            animationRunning = false;
         }
     }
 
@@ -208,6 +218,34 @@ public class AnimationView extends VerticalLayout {
             wasAutomaticallyStopped = false;
             controlButton.setText("Start Animation");
             controlButton.setEnabled(true);
+            logBox.removeAll();
+        }
+    }
+
+    @ClientCallable
+    public void handleAutoStop(int reachedStopCount) {
+        pauseAnimation();
+        this.animationRunning = false;
+        this.wasAutomaticallyStopped = true;
+        this.stopCount = reachedStopCount;
+
+        // Sensor-Daten oder andere Aktionen ausführen
+        animationViewController.sendSensorDataForStop(reachedStopCount);
+        updateLogBox();
+
+        if (reachedStopCount < 3) {
+            controlButton.setText("Resume Animation");
+            controlButton.setEnabled(true);
+        } else if (reachedStopCount == 3) {
+            controlButton.setText("Resume Final");
+            controlButton.setEnabled(true);
+        }
+    }
+
+    private void pauseAnimation() {
+        if (animatedDiv != null) {
+            animatedDiv.getStyle().set("animation-play-state", "paused");
+            animationRunning = false;
         }
     }
 
@@ -305,21 +343,5 @@ public class AnimationView extends VerticalLayout {
                 """,
                 animatedDiv.getElement(), staticDiv.getElement(), this.getElement()
         );
-    }
-
-    @ClientCallable
-    public void handleAutoStop(int reachedStopCount) {
-        pauseAnimation();
-        this.animationRunning = false;
-        this.wasAutomaticallyStopped = true;
-        this.stopCount = reachedStopCount;
-
-        if (reachedStopCount < 3) {
-            controlButton.setText("Resume Animation");
-            controlButton.setEnabled(true); // Button aktivieren
-        } else if (reachedStopCount == 3) {
-            controlButton.setText("Resume Final");
-            controlButton.setEnabled(true); // Button aktivieren
-        }
     }
 }

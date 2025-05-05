@@ -27,7 +27,7 @@ public class SensorDataModel {
     private String anprOverviewPicture;
     private String anprSideviewPicture;
     private int vehicleWeightClass;
-    private int vehicleType; //VehicleType von Sharedlib
+    private int vehicleType;
     private int vehicleHeight;
     private int vehicleWidth;
     private int vehicleLength;

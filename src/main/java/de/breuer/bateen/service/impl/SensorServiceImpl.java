@@ -62,6 +62,7 @@ public class SensorServiceImpl implements SensorService {
         postSensorData(dataModel, SensorRecordState.getById(6));
     }
 
+    @Override
     public void postSensorData(SensorDataModel dataModel, SensorRecordState state) {
         String url = ConfigController.getUrl();
         if (url == null || url.isEmpty()) {
@@ -92,7 +93,7 @@ public class SensorServiceImpl implements SensorService {
         }
     }
 
-    private SensorDataModel setSensorDataModel() {
+    public SensorDataModel setSensorDataModel() {
         AklsSensor akls = ConfigController.getAklsSensor();
         VehicleSensor vehicle = ConfigController.getVehicleSensor();
         IrCameraSensor irCamera = ConfigController.getIrCameraSensor();

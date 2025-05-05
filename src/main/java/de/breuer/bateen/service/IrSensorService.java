@@ -25,7 +25,7 @@ public class IrSensorService {
             return;
         }
 
-        String endpoint = url + "/koda/if-if/sensor-data";
+        String endpoint = url + "/koda/ir-if/sensor-data";
 
         try {
             ResponseEntity<Void> response = webClientBuilder.build()
